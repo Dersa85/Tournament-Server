@@ -1,3 +1,6 @@
+# Client content
+client/*
+
 # Logs
 logs
 *.log
