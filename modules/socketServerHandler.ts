@@ -1,6 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { BestOf3Board } from "./interfaces/board-interface";
-import { createBoard, getAllBoards, getBoard, resetCountdown, setSendBoardCb, startCountdown, stopCountdown, updateBoard } from "./scoreboardsHandler"
+import { createBoard, getBestOf3Boards, getBoard, getTeamPointBoards, resetCountdown, setSendBoardCb, startCountdown, stopCountdown, updateBoard } from "./scoreboardsHandler"
 
 export const openServer = (io: Server) => {
     io.on('connection', (socket: Socket) => {
@@ -11,7 +11,8 @@ export const openServer = (io: Server) => {
         })
         
         socket.on('getAllBoards', () => {
-            socket.emit('allBoards', getAllBoards());
+            socket.emit('allBestOf3Boards', getBestOf3Boards());
+            socket.emit('allTeamPointBoards', getTeamPointBoards());
         })
 
         socket.on('getBord', (type:string, id:string) => {
@@ -20,7 +21,16 @@ export const openServer = (io: Server) => {
 
         socket.on('createBoard', (boardValues : any) => {
             createBoard(boardValues);
-            io.emit('allBoards', getAllBoards())
+            switch (boardValues['board']) {
+                case 'BestOf3Board':
+                    io.emit('allBestOf3Boards', getBestOf3Boards());
+                    break;
+                case 'TeamPointBoard':
+                    io.emit('allBestOf3Boards', getBestOf3Boards());
+                    break;
+                default:
+                    console.log('No Types emited');
+            }
         })
 
         socket.on('startCountdown', (type: string, id: string) => {

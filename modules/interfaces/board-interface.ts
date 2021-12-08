@@ -1,9 +1,22 @@
-export interface Boards {
-    [type:string] : BestOf3Boards
+
+export interface BestOf3Boards {
+    [id:string]: BestOf3Board
 }
 
-interface BestOf3Boards {
-    [id:string]: BestOf3Board
+export interface TeamPointBoards {
+    [id:string]: TeamPointBoard
+}
+
+export interface BestOf3Board {
+    name: string;
+    rounds: number[];
+    countdown: Countdown;
+}
+
+export interface TeamPointBoard {
+    name: string;
+    points: number[];
+    countdown: Countdown;
 }
 
 export interface Countdown {
@@ -13,10 +26,7 @@ export interface Countdown {
     totalTime: number;
 }
 
-export interface BestOf3Board {
-    name: string;
-    rounds: number[];
-    countdown: Countdown;
-    
-}
+
+
+
 
