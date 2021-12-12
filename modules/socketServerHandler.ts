@@ -26,10 +26,10 @@ export const openServer = (io: Server) => {
                     io.emit('allBestOf3Boards', getBestOf3Boards());
                     break;
                 case 'TeamPointBoard':
-                    io.emit('allBestOf3Boards', getBestOf3Boards());
+                    io.emit('allTeamPointBoards', getTeamPointBoards());
                     break;
                 default:
-                    console.log('No Types emited');
+                    console.log('No Types found');
             }
         })
 

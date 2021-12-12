@@ -67,6 +67,8 @@ export const getBoard = (type: string, id: string) => {
 
 export const createBoard = (boardValues: any) => {
     const type: string = boardValues['board'];
+    console.log('Create new board:', type);
+    
     let board;
     const newId = customId({})
     if (type == 'BestOf3Board') {
