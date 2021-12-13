@@ -1,13 +1,9 @@
-import { BestOf3Board, BestOf3Boards,Countdown, TeamPointBoard, TeamPointBoards } from "./interfaces/board-interface";
+import { BestOf3Boards,Countdown, TeamPointBoards } from "./interfaces/board-interface";
 
 const customId = require("custom-id");
 
 const bestOf3Boards: BestOf3Boards = {};
 const teamPointBoards: TeamPointBoards = {}
-// const scoreboards: Boards = {
-//     BestOf3Board: {},
-//     TeamPoint: {}
-// };
 
 let sendBoardToAllCB: Function|null = null;
 export const setSendBoardCb = (cb: Function) => {
