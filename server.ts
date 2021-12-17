@@ -1,7 +1,8 @@
 import { join as pathCreator } from "path";
 import { openServer } from './modules/socketServerHandler';
 
-const app = require('express')(),
+const express = require('express'),
+      app = express(),
       http = require('http').Server(app),
       io = require('socket.io')(http)
 
@@ -12,10 +13,12 @@ const CLIENT_PATH = pathCreator(__dirname, 'client', 'index.html');
 openServer(io)
 
 http.listen(DEFAULT_PORT, () => {
-    console.log(`Webserver für den Port ${DEFAULT_PORT} gestartet`);
+    console.log(`Webserver started on Port ${DEFAULT_PORT}`);
 })
 
-app.get('/', (req: any, res: any) => {
-    res.sendFile(CLIENT_PATH)
-})
+app.use(express.static('client'))
+
+// app.get('/', (req: any, res: any) => {
+//     res.sendFile(CLIENT_PATH)
+// })
 

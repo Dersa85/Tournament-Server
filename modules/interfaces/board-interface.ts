@@ -9,14 +9,16 @@ export interface TeamPointBoards {
 
 export interface BestOf3Board {
     name: string;
-    rounds: number[];
+    rounds: [number, number, number, number, number, number];
     countdown: Countdown;
+    breakTime: Countdown;
 }
 
 export interface TeamPointBoard {
     name: string;
-    points: number[];
+    points: [number, number];
     countdown: Countdown;
+    breakTime: Countdown;
 }
 
 export interface Countdown {
