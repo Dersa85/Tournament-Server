@@ -5,6 +5,8 @@ import { createBoard, getBestOf3Boards, getBoard, getTeamPointBoards, removeLast
 export const openServer = (io: Server) => {
     io.on('connection', (socket: Socket) => {
         
+        ///// Scoreboard /////
+
         // Once bind for Countdown 
         setSendBoardCb((type: string, id:string) => {
             io.emit(`board/${type}/${id}`, getBoard(type, id));
@@ -92,6 +94,10 @@ export const openServer = (io: Server) => {
         //     console.log(board);
         //     io.emit(`board/${type}/${id}`, getBoard(type, id));
         // })
+
+
+        ///// Groups /////
+
     })
 }
 
