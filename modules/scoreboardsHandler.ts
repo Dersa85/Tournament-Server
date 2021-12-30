@@ -6,8 +6,8 @@ const bestOf3Boards: BestOf3Boards = {};
 const teamPointBoards: TeamPointBoards = {}
 
 let sendBoardToAllCB: Function|null = null;
-export const setSendBoardCb = (cb: Function) => {
-    sendBoardToAllCB = cb
+export const setSendBoardCb = (callback: Function) => {
+    sendBoardToAllCB = callback
 }
 
 setInterval(() => {
@@ -29,6 +29,13 @@ setInterval(() => {
     }
 }, 100);
 
+// function checkSoundPlaying() {
+
+// }
+
+// function emitSound(type: string, id: string, soundType: string) {
+//     if ()
+// }
 
 function emitBoard(type: string, id: string):void {
     if (sendBoardToAllCB != null) {
@@ -47,6 +54,7 @@ function runCountdown(countdown: Countdown): boolean {
     if (countdown.timeLeft < 0) {
         countdown.timeLeft = countdown.totalTime;
         countdown.isTimeRunning = false;
+
     }
     countdown.lastTimeUpdate = now;
     return true;
