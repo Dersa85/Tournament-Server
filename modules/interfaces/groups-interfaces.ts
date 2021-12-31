@@ -6,7 +6,11 @@ export interface Groups {
 
 export interface Group {
     titles : string[];
-    members: string[][]
+    members: Member[];
+}
+
+export interface Member {
+    values: string[];
 }
 
 
