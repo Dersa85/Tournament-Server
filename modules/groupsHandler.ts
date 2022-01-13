@@ -1,5 +1,7 @@
 import { Groups } from "./interfaces/groups-interfaces";
 
+const customId = require("custom-id");
+
 
 
 
@@ -8,15 +10,11 @@ const groups: Groups = {}
 export const getGroups = () => groups;
 
 
-export const createNewGroup = (groupName: string, group: any) => {
-    if (groups[groupName] != undefined) {
-        console.log('Group exist');
-        return;
-    }
-    console.log('Create new group', groupName);
-    
-    groups[groupName] = group;
+export const createNewGroup = ( group: any) => {
+    console.log('Create new group:', group);
+    const newId = customId({})
+    groups[newId] = group;
     console.log(groups);
-    
-
 }
+
+

@@ -100,8 +100,8 @@ export const openServer = (io: Server) => {
 
         ///// Groups /////
 
-        socket.on('createNewGroup', (groupName: string, group: Group) => {
-            createNewGroup(groupName, group);
+        socket.on('createNewGroup', (group: Group) => {
+            createNewGroup(group);
             io.emit('allBoards', getGroups())
         })
         

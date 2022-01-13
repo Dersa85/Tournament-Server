@@ -1,11 +1,12 @@
 
 
 export interface Groups {
-    [title: string]: Group;
+    [id: string]: Group;
 }
 
 export interface Group {
-    titles : string[];
+    groupName: string;
+    title : string[];
     members: Member[];
 }
 
