@@ -1,5 +1,5 @@
 import { Server, Socket } from "socket.io";
-import { createNewGroup, getGroups } from "./groupsHandler";
+import { createNewGroup, getGroup, getGroups } from "./groupsHandler";
 import { BestOf3Board } from "./interfaces/board-interface";
 import { Group } from "./interfaces/groups-interfaces";
 import { createBoard, getBestOf3Boards, getBoard, getTeamPointBoards, removeLastWinner, resetCountdown, resetScoreboard, setSendBoardCb, setWinner, startCountdown, stopCountdown, updateBoardArray, updateTeamPoints, updateTotalCountdown } from "./scoreboardsHandler"
@@ -107,6 +107,10 @@ export const openServer = (io: Server) => {
         
         socket.on('getAllGroups', () => {
             socket.emit('allGroups', getGroups());
+        })
+
+        socket.on('loadGroup', (id: string) => {
+            socket.emit(`getGroup/${id}`, getGroup(id))
         })
 
     })
