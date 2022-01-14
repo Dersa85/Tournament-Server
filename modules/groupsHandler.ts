@@ -17,6 +17,11 @@ export const createNewGroup = ( group: Group) => {
     console.log(groups);
 }
 
+export const editGroup = (id: string, group: Group) => {
+    console.log('Edit Group id', id);
+    groups[id] = group;
+}
+
 export const getGroup = (id: string) => {
     return groups[id] as Group;
 }
