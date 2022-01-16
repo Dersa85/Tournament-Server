@@ -201,7 +201,7 @@ export const resetScoreboard = (type: string, id: string): void => {
 export const updateBoardArray = (type: string, id: string, newBoard: any) => {
     switch (type) {
         case 'BestOf5Board':
-            BestOf5Board[id] = newBoard;
+            bestOf5Boards[id] = newBoard;
             break;
         case 'TeamPointBoard':
             teamPointBoards[id] = newBoard;
