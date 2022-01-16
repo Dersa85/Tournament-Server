@@ -1,8 +1,8 @@
-import { BestOf3Board, BestOf3Boards,Countdown, TeamPointBoard, TeamPointBoards } from "./interfaces/board-interface";
+import { BestOf5Board, BestOf5Boards,Countdown, TeamPointBoard, TeamPointBoards } from "./interfaces/board-interface";
 
 const customId = require("custom-id");
 
-const bestOf3Boards: BestOf3Boards = {};
+const bestOf5Boards: BestOf5Boards = {};
 const teamPointBoards: TeamPointBoards = {}
 
 let sendBoardToAllCB: Function|null = null;
@@ -11,12 +11,12 @@ export const setSendBoardCb = (callback: Function) => {
 }
 
 setInterval(() => {
-    for (let id in bestOf3Boards) {
-        const board = bestOf3Boards[id]
+    for (let id in bestOf5Boards) {
+        const board = bestOf5Boards[id]
         const isCountdownUpdated = runCountdown(board.countdown);
         const isBreakTimeUpdated = runCountdown(board.breakTime);
         if (isCountdownUpdated || isBreakTimeUpdated) {
-            emitBoard('BestOf3Board', id)
+            emitBoard('BestOf5Board', id)
         }
     }
     for (let id in teamPointBoards) {
@@ -60,12 +60,12 @@ function runCountdown(countdown: Countdown): boolean {
     return true;
 }
 
-export const getBestOf3Boards = () => bestOf3Boards;
+export const getBestOf5Boards = () => bestOf5Boards;
 export const getTeamPointBoards = () => teamPointBoards;
 export const getBoard = (type: string, id: string) => {
     switch (type) {
-        case 'BestOf3Board':
-            return bestOf3Boards[id];
+        case 'BestOf5Board':
+            return bestOf5Boards[id];
         case 'TeamPointBoard':
             return teamPointBoards[id];
         default:
@@ -79,7 +79,7 @@ export const createBoard = (boardValues: any) => {
     
     let board;
     const newId = customId({})
-    if (type == 'BestOf3Board') {
+    if (type == 'BestOf5Board') {
         board = {
             name: boardValues['name'],
             rounds: [0,0,0,0,0,0],
@@ -95,8 +95,8 @@ export const createBoard = (boardValues: any) => {
                 timeLeft: 60000,
                 isTimeRunning: false
             }
-        } as BestOf3Board
-        bestOf3Boards[newId] = board;
+        } as BestOf5Board
+        bestOf5Boards[newId] = board;
     } else if (type == 'TeamPointBoard') {
         board = {
             name: boardValues['name'],
@@ -144,8 +144,8 @@ export const updateTotalCountdown = (type: string, id: string, countdownType: st
 
 export const setWinner = (type: string, id: string, value: number): void => {
     let rounds: number[] = [];
-    if (type == 'BestOf3Board') {
-        const board = getBoard(type, id) as BestOf3Board;
+    if (type == 'BestOf5Board') {
+        const board = getBoard(type, id) as BestOf5Board;
         rounds = board.rounds;
     }
     for (let i = 0; i < rounds.length; i++) {
@@ -164,8 +164,8 @@ export const updateTeamPoints = (type: string, id: string, points: [number, numb
 
 export const removeLastWinner = (type: string, id: string): void => {
     let rounds: number[] = [];
-    if (type == 'BestOf3Board') {
-        const board = getBoard(type, id) as BestOf3Board;
+    if (type == 'BestOf5Board') {
+        const board = getBoard(type, id) as BestOf5Board;
         rounds = board.rounds;
     }
     for (let i = rounds.length -1; i >= 0; i--) {
@@ -178,9 +178,9 @@ export const removeLastWinner = (type: string, id: string): void => {
 
 export const resetScoreboard = (type: string, id: string): void => {
     switch (type) {
-        case 'BestOf3Board':
-            const bestOf3Board = getBoard(type, id) as BestOf3Board;
-            bestOf3Board.rounds = [0, 0, 0, 0, 0, 0];
+        case 'BestOf5Board':
+            const BestOf5Board = getBoard(type, id) as BestOf5Board;
+            BestOf5Board.rounds = [0, 0, 0, 0, 0, 0];
             resetCountdown(type, id, 'breakTime');
             resetCountdown(type, id, 'countdown');
             break;
@@ -198,30 +198,10 @@ export const resetScoreboard = (type: string, id: string): void => {
     }
 }
 
-// UNUSED
-// export const startBreakTime = (type: string, id: string) => {
-//     const board = getBoard(type, id) as any;
-//     board.breakTime.isTimeRunning = true;
-//     board.breakTime.lastTimeUpdate = Date.now();
-// }
-
-// // UNUSED
-// export const stopBreakTime = (type: string, id: string) => {
-//     const board = getBoard(type, id) as any;
-//     runCountdown(board.breakTime);
-//     board.breakTime.isTimeRunning = false;
-// }
-
-// export const resetBreakTime = (type: string, id: string) => {
-//     const board = getBoard(type, id) as any;
-//     board.breakTime.isTimeRunning = false;
-//     board.breakTime.timeLeft = board.breakTime.totalTime;
-// }
-
 export const updateBoardArray = (type: string, id: string, newBoard: any) => {
     switch (type) {
-        case 'BestOf3Board':
-            bestOf3Boards[id] = newBoard;
+        case 'BestOf5Board':
+            BestOf5Board[id] = newBoard;
             break;
         case 'TeamPointBoard':
             teamPointBoards[id] = newBoard;

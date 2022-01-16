@@ -1,7 +1,7 @@
 import { Server, Socket } from "socket.io";
 import { createNewGroup, editGroup, getGroup, getGroups } from "./groupsHandler";
 import { Group } from "./interfaces/groups-interfaces";
-import { createBoard, getBestOf3Boards, getBoard, getTeamPointBoards, removeLastWinner, resetCountdown, resetScoreboard, setSendBoardCb, setWinner, startCountdown, stopCountdown, updateBoardArray, updateTeamPoints, updateTotalCountdown } from "./scoreboardsHandler"
+import { createBoard, getBestOf5Boards, getBoard, getTeamPointBoards, removeLastWinner, resetCountdown, resetScoreboard, setSendBoardCb, setWinner, startCountdown, stopCountdown, updateBoardArray, updateTeamPoints, updateTotalCountdown } from "./scoreboardsHandler"
 
 export const openServer = (io: Server) => {
     io.on('connection', (socket: Socket) => {
@@ -14,7 +14,7 @@ export const openServer = (io: Server) => {
         })
         
         socket.on('getAllBoards', () => {
-            socket.emit('allBestOf3Boards', getBestOf3Boards());
+            socket.emit('allBestOf5Boards', getBestOf5Boards());
             socket.emit('allTeamPointBoards', getTeamPointBoards());
         })
 
@@ -45,8 +45,8 @@ export const openServer = (io: Server) => {
         socket.on('createBoard', (boardValues : any) => {
             createBoard(boardValues);
             switch (boardValues['board']) {
-                case 'BestOf3Board':
-                    io.emit('allBestOf3Boards', getBestOf3Boards());
+                case 'BestOf5Board':
+                    io.emit('allBestOf5Boards', getBestOf5Boards());
                     break;
                 case 'TeamPointBoard':
                     io.emit('allTeamPointBoards', getTeamPointBoards());
@@ -74,30 +74,6 @@ export const openServer = (io: Server) => {
             updateTotalCountdown(type, id, countdownType, newValue)
             io.emit(`board/${type}/${id}`, getBoard(type, id));
         })
-
-        // UNUSED
-        // socket.on('startBreakTime', (type: string, id: string) => {
-        //     startBreakTime(type, id)
-        // })
-
-        // // UNUSED
-        // socket.on('stopBreakTime', (type: string, id: string) => {
-        //     stopBreakTime(type, id)
-        // })
-
-        // socket.on('resetBreakTime', (type: string, id: string) => {
-        //     resetBreakTime(type, id)
-        //     io.emit(`board/${type}/${id}`, getBoard(type, id));
-        // })
-
-        // socket.on('updateBoard', (type: string, id: string, board: BestOf3Board) => {
-        //     updateBoardArray(type, id, board);
-        //     console.log(board);
-        //     io.emit(`board/${type}/${id}`, getBoard(type, id));
-        // })
-
-
-        ///// Groups /////
 
         socket.on('createNewGroup', (group: Group) => {
             createNewGroup(group);

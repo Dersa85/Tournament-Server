@@ -1,13 +1,13 @@
 
-export interface BestOf3Boards {
-    [id:string]: BestOf3Board
+export interface BestOf5Boards {
+    [id:string]: BestOf5Board
 }
 
 export interface TeamPointBoards {
     [id:string]: TeamPointBoard
 }
 
-export interface BestOf3Board {
+export interface BestOf5Board {
     name: string;
     rounds: [number, number, number, number, number, number];
     countdown: Countdown;
