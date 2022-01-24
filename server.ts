@@ -1,4 +1,6 @@
+import { existsSync } from 'fs';
 import { join as pathCreator } from "path";
+import { mkdirSync } from 'fs';
 import { openServer } from './modules/socketServerHandler';
 
 const express = require('express'),
@@ -10,6 +12,7 @@ const express = require('express'),
 const DEFAULT_PORT = 7878;
 const CLIENT_PATH = pathCreator(__dirname, 'client', 'index.html');
 
+createFolder();
 openServer(io)
 
 http.listen(DEFAULT_PORT, () => {
@@ -22,3 +25,13 @@ app.use(express.static('client'))
 //     res.sendFile(CLIENT_PATH)
 // })
 
+function createFolder(): void {
+    const dataFolder = './data';
+    const clientFolder = './client';
+    if (!existsSync(dataFolder)) {
+        mkdirSync(dataFolder);
+    }
+    if (!existsSync(clientFolder)) {
+        mkdirSync(clientFolder);
+    }
+}

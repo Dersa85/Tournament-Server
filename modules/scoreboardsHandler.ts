@@ -1,9 +1,14 @@
 import { BestOf5Board, BestOf5Boards,Countdown, TeamPointBoard, TeamPointBoards } from "./interfaces/board-interface";
+import { join as pathCreator } from "path";
+import { loadJson, saveJson } from "./fileHandler";
 
 const customId = require("custom-id");
 
-const bestOf5Boards: BestOf5Boards = {};
-const teamPointBoards: TeamPointBoards = {}
+const bestOf5BoardsPath = pathCreator(__dirname, '..', 'data', 'bestOf5Boards.json');
+const teamPointBoardsPath = pathCreator(__dirname, '..', 'data', 'teamPointBoards.json');
+
+const bestOf5Boards: BestOf5Boards = loadJson(bestOf5BoardsPath) as BestOf5Boards;
+const teamPointBoards: TeamPointBoards = loadJson(teamPointBoardsPath) as TeamPointBoards;
 
 let sendBoardToAllCB: Function|null = null;
 export const setSendBoardCb = (callback: Function) => {
@@ -11,13 +16,19 @@ export const setSendBoardCb = (callback: Function) => {
 }
 
 setInterval(() => {
+    let isBoardsUpdated = false
     for (let id in bestOf5Boards) {
         const board = bestOf5Boards[id]
         const isCountdownUpdated = runCountdown(board.countdown);
         const isBreakTimeUpdated = runCountdown(board.breakTime);
         if (isCountdownUpdated || isBreakTimeUpdated) {
             emitBoard('BestOf5Board', id)
+            isBoardsUpdated = true;
         }
+    }
+    if (isBoardsUpdated) {
+        saveJson(bestOf5BoardsPath, bestOf5Boards);
+        isBoardsUpdated = false
     }
     for (let id in teamPointBoards) {
         const board = teamPointBoards[id]
@@ -26,6 +37,9 @@ setInterval(() => {
         if (isCountdownUpdated || isBreakTimeUpdated) {
             emitBoard('TeamPointBoard', id)
         }
+    }
+    if (isBoardsUpdated) {
+        saveJson(teamPointBoardsPath, teamPointBoards);
     }
 }, 100);
 
@@ -36,6 +50,14 @@ setInterval(() => {
 // function emitSound(type: string, id: string, soundType: string) {
 //     if ()
 // }
+
+function saveBoard(type: string): void {
+    if (type == 'BestOf5Board') {
+        saveJson(bestOf5BoardsPath, bestOf5Boards);
+    } else {
+        saveJson(teamPointBoardsPath, teamPointBoards);
+    }
+}
 
 function emitBoard(type: string, id: string):void {
     if (sendBoardToAllCB != null) {
@@ -115,31 +137,36 @@ export const createBoard = (boardValues: any) => {
             }
         } as TeamPointBoard
         teamPointBoards[newId] = board;
-    } else { return board }
+    }
+    saveBoard(type);
 }
 
 export const startCountdown = (type: string, id: string, countdownType: string) => {
     const board = getBoard(type, id) as any;
     board[countdownType].isTimeRunning = true;
     board[countdownType].lastTimeUpdate = Date.now();
+    saveBoard(type);
 }
 
 export const stopCountdown = (type: string, id: string, countdownType: string) => {
     const board = getBoard(type, id) as any;
     runCountdown(board.countdown);
     board[countdownType].isTimeRunning = false;
+    saveBoard(type);
 }
 
 export const resetCountdown = (type: string, id: string, countdownType: string) => {
     const board = getBoard(type, id) as any;
     board[countdownType].isTimeRunning = false;
     board[countdownType].timeLeft = board[countdownType].totalTime;
+    saveBoard(type);
 }
 
 export const updateTotalCountdown = (type: string, id: string, countdownType: string, newValue: number): void => {
     const board = getBoard(type, id) as any;
     board[countdownType].totalTime = newValue
     resetCountdown(type, id, countdownType);
+    saveBoard(type);
 }
 
 export const setWinner = (type: string, id: string, value: number): void => {
@@ -154,12 +181,14 @@ export const setWinner = (type: string, id: string, value: number): void => {
         return;
         }
     }
+    saveBoard(type);
 }
 
 export const updateTeamPoints = (type: string, id: string, points: [number, number]): void => {
     const board = getBoard(type, id) as TeamPointBoard;
     board.points[0] = points[0];
     board.points[1] = points[1];
+    saveBoard(type);
 }
 
 export const removeLastWinner = (type: string, id: string): void => {
@@ -174,6 +203,7 @@ export const removeLastWinner = (type: string, id: string): void => {
         return;
         }
     }
+    saveBoard(type);
 }
 
 export const resetScoreboard = (type: string, id: string): void => {
@@ -196,6 +226,7 @@ export const resetScoreboard = (type: string, id: string): void => {
             console.log("Board type not found");
             break;
     }
+    saveBoard(type);
 }
 
 export const updateBoardArray = (type: string, id: string, newBoard: any) => {
@@ -209,7 +240,7 @@ export const updateBoardArray = (type: string, id: string, newBoard: any) => {
         default:
             console.log('Boardtype not found:', type);
     }
-    
+    saveBoard(type);
 }
 
 

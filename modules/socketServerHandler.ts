@@ -3,6 +3,7 @@ import { createNewGroup, editGroup, getGroup, getGroups } from "./groupsHandler"
 import { Group } from "./interfaces/groups-interfaces";
 import { createBoard, getBestOf5Boards, getBoard, getTeamPointBoards, removeLastWinner, resetCountdown, resetScoreboard, setSendBoardCb, setWinner, startCountdown, stopCountdown, updateBoardArray, updateTeamPoints, updateTotalCountdown } from "./scoreboardsHandler"
 
+
 export const openServer = (io: Server) => {
     io.on('connection', (socket: Socket) => {
         
