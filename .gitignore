@@ -1,5 +1,6 @@
 # Client content
 client/*
+date/*
 
 # Logs
 logs
